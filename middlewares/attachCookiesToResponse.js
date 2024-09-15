@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const attachCookiesToResponse = (data, res) => {
   const token = jwt.sign({ data }, process.env.JWT_SECRET_KEY);
-  return res.cookie("user", token);
+  return res.cookie("user", token, { httpOnly: true });
 };
 
 export default attachCookiesToResponse;

@@ -21,20 +21,22 @@ const login = async (req, res) => {
     return res.status(401).json({ msg: "invalid credentials" });
   }
 
-  attachCookiesToResponse(user._id, res);
+  const { password: hashPass, id, createdAt, ...info } = user;
+
+  attachCookiesToResponse(user.id, res);
   return res.status(200).json({
     msg: "success",
-    user: { email: user.email, username: user.username, avatar: user.avatar },
+    user: { ...info },
   });
 };
 
-const logout = async (req, res) => {
+const logout = (req, res) => {
   res.clearCookie("user").json({ msg: "logged out" });
 };
 
 const register = async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
+  const { name, username, email, password } = req.body;
+  if (!name || !username || !email || !password) {
     return res.status(400).json({ msg: "Please provide all values" });
   }
 
@@ -57,16 +59,19 @@ const register = async (req, res) => {
 
   const user = await prisma.users.create({
     data: {
+      name,
       email,
       username,
       password: hashedPassword,
     },
   });
 
-  attachCookiesToResponse(user._id, res);
+  const { password: hashPass, id, createdAt, ...info } = user;
+
+  attachCookiesToResponse(user.id, res);
   res.status(201).json({
     msg: "user created",
-    user: { email: user.email, username: user.username, avatar: user.avatar },
+    user: { ...info },
   });
 };
 
