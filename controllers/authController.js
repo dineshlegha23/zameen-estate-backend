@@ -75,4 +75,28 @@ const register = async (req, res) => {
   });
 };
 
-export { login, logout, register };
+const update = async (req, res) => {
+  const { userId } = req.user;
+
+  const { name, email, username, avatar } = req.body;
+
+  try {
+    const user = await prisma.users.update({
+      where: { id: userId },
+      data: {
+        username,
+        email,
+        name,
+        avatar,
+      },
+    });
+    const { password, createdAt, ...info } = user;
+    return res
+      .status(200)
+      .json({ msg: "Updated successfully", user: { ...info } });
+  } catch (err) {
+    return res.status(400).json({ msg: "Something went wrong" });
+  }
+};
+
+export { login, logout, register, update };
