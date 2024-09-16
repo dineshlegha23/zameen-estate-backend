@@ -10,6 +10,10 @@ app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.send("Working");
+});
+
 app.use("/api/auth", authRoute);
 // app.use("/api/users", userRoute);
 // app.use("/api/posts", postRoute);
