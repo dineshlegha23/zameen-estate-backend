@@ -5,7 +5,12 @@ const app = express();
 
 import authRoute from "./routes/authRoute.js";
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(
+  cors({
+    origin: [process.env.CLIENT_URL, process.env.PROD_CLIENT_URL],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
