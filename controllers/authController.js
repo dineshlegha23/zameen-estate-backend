@@ -9,7 +9,7 @@ const login = async (req, res) => {
     return res.status(400).json({ msg: "Please provide email and password" });
   }
 
-  const user = await prisma.users.findUnique({
+  const user = await prisma.user.findUnique({
     where: { email },
   });
 
@@ -40,7 +40,7 @@ const register = async (req, res) => {
     return res.status(400).json({ msg: "Please provide all values" });
   }
 
-  const emailAlreadyExists = await prisma.users.findUnique({
+  const emailAlreadyExists = await prisma.user.findUnique({
     where: { email },
   });
 
@@ -48,7 +48,7 @@ const register = async (req, res) => {
     return res.status(400).json({ msg: "email already exists" });
   }
 
-  const usernameAlreadyExists = await prisma.users.findUnique({
+  const usernameAlreadyExists = await prisma.user.findUnique({
     where: { username },
   });
   if (usernameAlreadyExists) {
@@ -57,7 +57,7 @@ const register = async (req, res) => {
 
   const hashedPassword = await hashPassword(password);
 
-  const user = await prisma.users.create({
+  const user = await prisma.user.create({
     data: {
       name,
       email,
@@ -81,7 +81,7 @@ const update = async (req, res) => {
   const { name, email, username, avatar } = req.body;
 
   try {
-    const user = await prisma.users.update({
+    const user = await prisma.user.update({
       where: { id: userId },
       data: {
         username,
