@@ -26,9 +26,11 @@ const getPosts = async (req, res) => {
 const getPost = async (req, res) => {
   const { id } = req.params;
   const { token } = req.cookies;
+
   if (token) {
     try {
       const { userId } = verifyToken(token);
+
       const post = await prisma.post.findUnique({
         where: { id },
         include: {
@@ -129,7 +131,7 @@ const savePost = async (req, res) => {
       await prisma.savedPost.delete({
         where: { id: savedPost.id },
       });
-      res.status(200).json({ msg: "Post unsaved" });
+      return res.status(200).json({ msg: "Post unsaved" });
     } else {
       await prisma.savedPost.create({
         data: {
@@ -137,9 +139,12 @@ const savePost = async (req, res) => {
           postId,
         },
       });
-      res.status(201).json({ msg: "Post saved" });
+
+      return res.status(201).json({ msg: "Post saved" });
     }
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({ msg: "Failed to save/unsave post" });
   }
 };
@@ -159,9 +164,10 @@ const userPosts = async (req, res) => {
 
     savedPosts = savedPosts.map((post) => post.post);
 
-    res.status(200).json({ posts, savedPosts });
+    return res.status(200).json({ posts, savedPosts });
   } catch (error) {
-    res.status(500).json({ msg: "Failed to get user posts" });
+    console.log(error);
+    return res.status(500).json({ msg: "Failed to get user posts" });
   }
 };
 

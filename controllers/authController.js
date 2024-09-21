@@ -31,7 +31,7 @@ const login = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie("user").json({ msg: "logged out" });
+  res.clearCookie("token").json({ msg: "logged out" });
 };
 
 const register = async (req, res) => {
